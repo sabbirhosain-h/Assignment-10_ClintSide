@@ -1,17 +1,55 @@
 import { Chrome, Lock, LogInIcon, Mail } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { motion } from "motion/react"
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
+import { AuthContext } from '../Context/AuthContext';
 
 const LogIn = () => {
-    const [email, setEmail] = useState("");
+
+
+    const { SignIn, signInWithGoogle, setUser} = use(AuthContext);
+    // const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
+    const location = useLocation
 
     const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    }
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    SignIn(email, password)
+    .then(result => {
+        const user = result.user;
+        setUser(user);
+        console.log(user);
+        setLoading(false);
+        e.target.reset();
+        navigate(`${location.state ? location.state : "/"}`)
+    })
+    .catch(()=>{
+      alert("Wrong Email or Password");
+    })
+
+    signInWithGoogle()
+    .then((result)=> {
+      const googleuser = result.user
+      setUser(googleuser)
+      console.log(googleuser);
+      navigate("/")
+    })
+    .catch(() => {
+      alert("Google sign-in error:");
+      // toast.error("Google sign-in failed");
+    })
+  };
+
+
+
+
 
     return (
        <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -26,7 +64,7 @@ const LogIn = () => {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring' }}
+              transition={{ delay: 0.5, type: 'spring' }}
               className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
             >
               <LogInIcon className="w-8 h-8 text-white" />
@@ -45,8 +83,7 @@ const LogIn = () => {
                 <input
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name='email'
                   className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                   placeholder="you@example.com"
                   required
@@ -63,6 +100,7 @@ const LogIn = () => {
                 <input
                   id="password"
                   type="password"
+                  name='password'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
@@ -119,14 +157,11 @@ const LogIn = () => {
               </div>
             </div>
 
-            <button
-              type="button"
-            //   onClick={handleGoogleLogin}
-              className="mt-4 w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-            >
-              <Chrome className="w-5 h-5" />
-              <span>Sign in with Google</span>
-            </button>
+    
+            <button onClick={signInWithGoogle} className="btn bg-white text-black border-[#e5e5e5] w-full mt-6">
+  <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="m0 0H512V512H0" fill="#fff"></path><path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path><path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path><path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"></path><path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path></g></svg>
+  Login with Google
+</button>
           </div>
 
           <p className="mt-6 text-center text-slate-600 dark:text-slate-400">

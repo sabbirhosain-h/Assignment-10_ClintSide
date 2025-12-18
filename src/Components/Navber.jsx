@@ -1,10 +1,14 @@
 import { BookText } from 'lucide-react';
-import React from 'react';
+import React, { use } from 'react';
 import { Link, NavLink } from 'react-router';
+import { AuthContext } from '../Context/AuthContext';
 
 
 
 const Navber = () => {
+
+    const {user, SignOut} = use(AuthContext)
+    console.log(user);
     return (
         <nav className='bg-white transition-colors'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -22,8 +26,21 @@ const Navber = () => {
             <div className='gap-5 flex'>
                 <NavLink to='/'>Home</NavLink>
                 <NavLink to='/Login'>Login</NavLink>
+                <NavLink to='/AllBooks'>All Books</NavLink>
+                <NavLink to='/AddBooks'>Add Books</NavLink>
                 
 
+            </div>
+            <div>
+                {
+                    user ?
+                    <button onClick={SignOut}>Sign Out</button>
+                    :
+                    <><NavLink to='/Login'>Login</NavLink>
+                   <NavLink to='/SignUp'>Sign Up</NavLink> </>
+
+                }
+                
             </div>
                 
          </div>

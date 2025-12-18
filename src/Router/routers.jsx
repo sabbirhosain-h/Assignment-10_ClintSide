@@ -4,6 +4,8 @@ import Home from "../Components/Home.jsx";
 import ErrorPage from "../Pages/ErrorPage.jsx";
 import LogIn from "../Pages/LogIn.jsx"
 import SignUp from "../Pages/SignUp.jsx";
+import AllBooks from "../Pages/AllBooks.jsx";
+import AddBooks from "../Pages/AddBooks.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -22,7 +24,15 @@ export const router = createBrowserRouter([
         {
           path: "SignUp",
           Component: SignUp,
-        }
+        },
+        {
+          path: "AllBooks",
+          Component: AllBooks,
+        },
+        {
+          path: "AddBooks",
+          Component: AddBooks,
+        },
     ],
   },
 ]);
