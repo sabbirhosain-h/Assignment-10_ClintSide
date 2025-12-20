@@ -44,12 +44,7 @@ const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
     .catch(()=>{
       alert("Sign Up failed. Please try again.");
     })
-
-
   };
-
-
-
 
   const handleGoogleSignUp = () => {
     signInWithGoogle()

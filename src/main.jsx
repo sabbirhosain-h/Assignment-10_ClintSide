@@ -6,11 +6,14 @@ import AuthProvider from './Context/AuthPovider.jsx';
 
 import App from './Router/App.jsx'
 import { router } from './Router/routers.jsx';
+import ThemeProvider from './Context/ThemeProvider.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>  
    <AuthProvider>
-     <RouterProvider router={router} />,
+     <ThemeProvider>
+      <RouterProvider router={router} />
+     </ThemeProvider>
    </AuthProvider>
   </StrictMode>,
 )

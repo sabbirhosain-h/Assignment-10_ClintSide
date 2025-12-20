@@ -6,8 +6,8 @@
 
 nav a.active button,
 nav a.active {
-    background-color: var(--color-blue-600);
-    color: rgb(214, 33, 33);
+    background-color: var(--color-gray-300);
+    color: rgb(136, 103, 103);
 }
 
 * {

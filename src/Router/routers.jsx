@@ -6,6 +6,8 @@ import LogIn from "../Pages/LogIn.jsx"
 import SignUp from "../Pages/SignUp.jsx";
 import AllBooks from "../Pages/AllBooks.jsx";
 import AddBooks from "../Pages/AddBooks.jsx";
+import MyBooks from "../Pages/MyBooks.jsx";
+import PrivateRoute from "./privateRoute.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -31,7 +33,11 @@ export const router = createBrowserRouter([
         },
         {
           path: "AddBooks",
-          Component: AddBooks,
+          element: <PrivateRoute><AddBooks></AddBooks></PrivateRoute>,
+        },
+        {
+          path: "MyBooks",
+          element: <PrivateRoute><MyBooks></MyBooks></PrivateRoute>,
         },
     ],
   },

@@ -35,17 +35,25 @@ const LogIn = () => {
     })
 
     signInWithGoogle()
-    .then((result)=> {
-      const googleuser = result.user
-      setUser(googleuser)
-      console.log(googleuser);
-      navigate("/")
-    })
-    .catch(() => {
-      alert("Google sign-in error:");
-      // toast.error("Google sign-in failed");
-    })
-  };
+         .then((result)=> {
+            const googleuser = result.user
+            setUser(googleuser)
+            console.log(googleuser);
+             navigate("/")
+          })
+            .catch((error) => {
+                alert("Google sign-in error:");
+                // toast.error("Google sign-in failed");
+            })
+
+
+
+
+          };
+
+
+
+
 
 
 
@@ -64,7 +72,7 @@ const LogIn = () => {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.5, type: 'spring' }}
+              transition={{ delay: 0.2, type: 'spring' }}
               className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
             >
               <LogInIcon className="w-8 h-8 text-white" />
