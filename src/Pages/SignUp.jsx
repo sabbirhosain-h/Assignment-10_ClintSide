@@ -3,7 +3,7 @@ import { User, Mail, Lock, Image, Chrome, CheckCircle, XCircle, EyeOff, Eye } fr
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router';
-import { AuthContext } from '../Context/AuthContext';
+import { AuthContext, ThemeContext } from '../Context/AuthContext';
 // import { toast } from 'sonner@2.0.3';
 
 const SignUp = () => {
@@ -17,6 +17,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
 const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
+const {isDark} = use(ThemeContext);
 
   const passwordValidation = {
     minLength: password.length >= 6,
@@ -61,15 +62,15 @@ const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
   };
 
   return (
-         <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+         <div className={`min-h-[calc(100vh-4rem)]  dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${isDark ? "bg-slate-700" : "bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"}`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="max-w-md w-full"
       >
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 border border-slate-200 dark:border-slate-700">
-          <div className="text-center mb-8">
+        <div className={`${isDark ? "bg-slate-800 border-slate-700 border-slate-700" : "bg-white" }  rounded-2xl shadow-xl p-8 border border-slate-200 dark:`}>
+          <div className={`text-center mb-8`}>
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -78,13 +79,13 @@ const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
             >
               <User className="w-8 h-8 text-white" />
             </motion.div>
-            <h2 className="text-slate-900 dark:text-white mb-2">Create Account</h2>
-            <p className="text-slate-600 dark:text-slate-400">Join The Book Haven community</p>
+            <h2 className={`text-slate-900 ${isDark ? "text-white" : "text-slate-900"} mb-2`}>Create Account</h2>
+            <p className={`${isDark ? "text-white" : "text-slate-900"} mb-2`}>Join The Book Haven community</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="name" className="block text-slate-700 dark:text-slate-300 mb-2">
+              <label className={`block text-slate-700 ${isDark ? "text-white" : "text-slate-700"} mb-2`}>
                 Full Name
               </label>
               <div className="relative">
@@ -102,7 +103,7 @@ const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-slate-700 dark:text-slate-300 mb-2">
+              <label className={`block text-slate-700 ${isDark ? "text-white" : "text-slate-700"} mb-2`}>
                 Email Address
               </label>
               <div className="relative">
@@ -120,7 +121,7 @@ const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
             </div>
 
             <div>
-              <label htmlFor="photoURL" className="block text-slate-700 dark:text-slate-300 mb-2">
+              <label className={`block text-slate-700 ${isDark ? "text-white" : "text-slate-700"} mb-2`}>
                 Photo URL (Optional)
               </label>
               <div className="relative">
@@ -137,7 +138,7 @@ const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-slate-700 dark:text-slate-300 mb-2">
+              <label className={`block text-slate-700 ${isDark ? "text-white" : "text-slate-700"} mb-2`}>
                 Password
               </label>
               <div className="relative">
@@ -204,7 +205,7 @@ const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
                 <div className="w-full border-t border-slate-300 dark:border-slate-600"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                <span className={`px-2 ${isDark ? "bg-slate-800 text-white" : "bg-white text-slate-500 "}`}>
                   Or continue with
                 </span>
               </div>

@@ -22,10 +22,10 @@ const Footer = () => {
               Join our community of book lovers today.
             </p>
             <div className="flex items-center gap-3">
-              <a href="#" className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-indigo-600 transition-colors">
+              <a href="https://github.com/sabbirhosain-h" className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-indigo-600 transition-colors">
                 <Github className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-indigo-600 transition-colors">
+              <a href="https://www.linkedin.com/feed/" className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-indigo-600 transition-colors">
                 <Linkedin className="w-5 h-5" />
               </a>
               <a href="#" className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-indigo-600 transition-colors">
@@ -39,19 +39,19 @@ const Footer = () => {
             <h3 className="text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li><Link to="/" className="hover:text-indigo-400 transition-colors">Home</Link></li>
-              <li><Link to="/all-books" className="hover:text-indigo-400 transition-colors">All Books</Link></li>
-              <li><Link to="/add-book" className="hover:text-indigo-400 transition-colors">Add Book</Link></li>
-              <li><Link to="/my-books" className="hover:text-indigo-400 transition-colors">My Books</Link></li>
+              <li><Link to="/AllBooks" className="hover:text-indigo-400 transition-colors">All Books</Link></li>
+              <li><Link to="/AddBooks" className="hover:text-indigo-400 transition-colors">Add Book</Link></li>
+              <li><Link to="/MyBooks" className="hover:text-indigo-400 transition-colors">My Books</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white mb-4">Support</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Contact Us</a></li>
+              <li><a className="hover:text-indigo-400 transition-colors">Help Center</a></li>
+              <li><a  className="hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
+              <li><a  className="hover:text-indigo-400 transition-colors">Terms of Service</a></li>
+              <li><a  className="hover:text-indigo-400 transition-colors">Contact Us</a></li>
             </ul>
           </div>
         </div>
