@@ -6,7 +6,7 @@ import { Home, BookOpen, Search } from 'lucide-react';
 
 const ErrorPage = () => {
     return (
-           <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center px-4">
+           <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

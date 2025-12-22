@@ -28,7 +28,7 @@ const Navbar = () => {
                 {/* Logo */}
              <div className='flex'>
                         <Link to='/' className='flex items-center gap-2 group'>
-                            <div className='w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 shadow-md'>
+                            <div className='w-10 h-10 primary-btn rounded-xl flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 shadow-md'>
                                 <BookText className='text-white w-6 h-6'/>
                             </div>
                             <span className={`text-xl font-semibold text-slate-800 sm:block group-hover:text-indigo-600 ${isDark ? 'dark:group-hover:text-indigo-400 text-white' : ''}   transition-colors`}>
@@ -88,7 +88,7 @@ const Navbar = () => {
                                Log In
                     </NavLink>
                        
-                       <div><Link to='/Signup'><button className={`btn text-white text-sm sm:text-base ${isDark ? 'bg-blue-700' : 'bg-slate-500 '} ` }>Sign UP</button></Link></div>
+                       <div><Link to='/Signup'><button className={`btn text-white text-sm sm:text-base primary-btn ` }>Sign UP</button></Link></div>
                     </>
                     }
                     

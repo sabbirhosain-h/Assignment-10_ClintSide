@@ -13,3 +13,12 @@ nav a.active {
 * {
    font-family: "Roboto", sans-serif;
 }
+
+.primary-btn {
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+
+}
+.dark {
+    background-color: #1d293d;
+    transition: background-color ;
+}

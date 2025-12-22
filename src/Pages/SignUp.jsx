@@ -62,20 +62,20 @@ const {isDark} = use(ThemeContext);
   };
 
   return (
-         <div className={`min-h-[calc(100vh-4rem)]  dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${isDark ? "bg-slate-700" : "bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"}`}>
+         <div className={`min-h-[calc(100vh-4rem)]  dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${isDark ? "bg-slate-700" : "bg-gray-100"}`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="max-w-md w-full"
       >
-        <div className={`${isDark ? "bg-slate-800 border-slate-700 border-slate-700" : "bg-white" }  rounded-2xl shadow-xl p-8 border border-slate-200 dark:`}>
+        <div className={`${isDark ? "bg-slate-800  border-slate-700" : "bg-white" }  rounded-2xl shadow-xl p-8 border border-slate-200 dark:`}>
           <div className={`text-center mb-8`}>
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              className="w-16 h-16 primary-btn rounded-2xl flex items-center justify-center mx-auto mb-4"
             >
               <User className="w-8 h-8 text-white" />
             </motion.div>
@@ -155,7 +155,7 @@ const {isDark} = use(ThemeContext);
                 <button 
                            type='button' 
                            onClick={() => setShowPassword(!showPassword)}
-                           className="absolute right-3 top-[15px] sm:top-[15px] text-gray-500 hover:text-gray-700"
+                           className="absolute right-3 top-3.75 text-gray-500 hover:text-gray-700"
                            aria-label={showPassword ? "Hide password" : "Show password"}
                          >
                            {showPassword ? <Eye className="h-4 w-4 sm:h-5 sm:w-5" /> : <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" />}
@@ -183,7 +183,7 @@ const {isDark} = use(ThemeContext);
             <button
               type="submit"
               disabled={loading || !isPasswordValid}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 primary-btn text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
