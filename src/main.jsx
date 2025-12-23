@@ -7,13 +7,16 @@ import AuthProvider from './Context/AuthPovider.jsx';
 import App from './Router/App.jsx'
 import { router } from './Router/routers.jsx';
 import ThemeProvider from './Context/ThemeProvider.jsx';
+import DataProvider from './Context/DataProvider.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>  
    <AuthProvider>
-     <ThemeProvider>
+     <DataProvider>
+      <ThemeProvider>
       <RouterProvider router={router} />
      </ThemeProvider>
+     </DataProvider>
    </AuthProvider>
   </StrictMode>,
 )

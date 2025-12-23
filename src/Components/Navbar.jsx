@@ -19,7 +19,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className={` bg-white shadow-md `}>
+        <div className={` bg-white shadow-md sticky top-0 z-50 `}>
 
 
             <div className={`flex items-center justify-between  px-4 sm:px-6 lg:px-8  h-20 ${isDark ? "bg-slate-900" : ''}`}>
@@ -113,7 +113,7 @@ const Navbar = () => {
             
            {/* Button  */}
             {isMenuOpen && (
-                    <div className='md:hidden py-4 space-y-2 border-t border-slate-200 dark:border-slate-700'>
+                    <div className={`md:hidden py-4 space-y-2 border-t   ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200"}`}>
                         <NavLink 
                             to='/' 
                             onClick={toggleMenu}
@@ -157,17 +157,28 @@ const Navbar = () => {
                                 </button>
                             ) : (
                                 <> 
+                                     <button
+                     onClick={toggleDarkMode}
+                    className={`w-full h-10 flex items-center justify-center rounded-full hover:bg-slate-100  transition-all duration-300 text-slate-600  hover:rotate-12
+                    ${isDark ? 'dark:bg-slate-700 hover:bg-slate-700 text-slate-300' : 'bg-slate-100'} `}>
+
+                                {isDark ?
+                                 <Moon className="w-5 h-5" />
+                                 :
+                                 <Sun className="w-5 h-5" /> 
+                                }
+                </button>
                                     <NavLink 
                                         to='/Login'
                                         onClick={toggleMenu}
-                                        className="block px-4 py-3 rounded-lg font-medium text-center text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                        className="block px-4 py-3 rounded-lg font-medium text-center text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition-colors"
                                     >
                                         Login
                                     </NavLink>
                                     <NavLink 
                                         to='/SignUp'
                                         onClick={toggleMenu}
-                                        className="block px-4 py-3 rounded-lg font-medium text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all"
+                                        className="block px-4 py-3 rounded-lg font-medium text-center primary-btn text-white hover:from-indigo-700 hover:to-purple-700 transition-all"
                                     >
                                         Sign Up
                                     </NavLink>
