@@ -14,7 +14,7 @@ const Home = () => {
     const {books} = useContext(DataContext)
     
     
-
+    
 
     
     return (
@@ -22,7 +22,7 @@ const Home = () => {
         <Banner></Banner>
         <LatestAdditions books={books} ></LatestAdditions>
         <ExplorebyGenre></ExplorebyGenre>
-        <TopRatedBooks></TopRatedBooks>
+        <TopRatedBooks books={books} ></TopRatedBooks>
         <AboutThePage></AboutThePage>
         </div>
     );

@@ -2,12 +2,13 @@ import React, { useContext } from 'react';
 import { ThemeContext } from '../../Context/AuthContext';
 import { Link } from 'react-router';
 import { ArrowRight, Star, User } from 'lucide-react';
+import { motion } from "motion/react"
 
 const LatestAdditions = ({ books }) => {
 const { isDark } = useContext(ThemeContext);
 
 return (
-<div className={`${isDark ? 'bg-gray-900' : 'bg-gray-50'} py-12 px-4 sm:px-6 lg:px-8`}>
+<div className={`${isDark ? 'bg-slate-900' : 'bg-gray-50'} py-12 px-4 sm:px-6 lg:px-8`}>
     <div className="max-w-7xl mx-auto">
     
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
@@ -26,7 +27,11 @@ return (
     </div>
 
     
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <motion.div 
+      initial={{ x: -100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {books.slice(0, 8).map((book) => (
         <Link
             key={book._id}
@@ -82,7 +87,7 @@ return (
             </div>
         </Link>
         ))}
-    </div>
+    </motion.div>
     </div>
 </div>
 );

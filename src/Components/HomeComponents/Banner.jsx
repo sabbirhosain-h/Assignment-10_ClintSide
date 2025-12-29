@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 
 const Banner = () => {
     return (
-    <div className={`relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 overflow-hidden`}>
+    <div className={`relative bg-linear-to-br from-indigo-600 via-purple-600 to-pink-500 overflow-hidden`}>
             
             
            

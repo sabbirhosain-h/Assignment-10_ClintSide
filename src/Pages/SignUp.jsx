@@ -1,10 +1,11 @@
 import React, { use, useState } from 'react';
 import { User, Mail, Lock, Image, Chrome, CheckCircle, XCircle, EyeOff, Eye } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { Link } from 'react-router';
 import { AuthContext, ThemeContext } from '../Context/AuthContext';
-// import { toast } from 'sonner@2.0.3';
+import { updateProfile } from 'firebase/auth';
+
 
 const SignUp = () => {
   const [showPassword , setShowPassword] = useState(false);
@@ -13,8 +14,8 @@ const SignUp = () => {
   const [photoURL, setPhotoURL] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-//   const { register, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
 const {SignUp, signInWithGoogle, setUser} = use(AuthContext);
 const {isDark} = use(ThemeContext);
@@ -33,18 +34,42 @@ const {isDark} = use(ThemeContext);
     const password = e.target.password.value;
     setLoading(true);
 
-    SignUp(email, password)
-    .then(result => {
-        const user = result.user;
-        setUser(user);
-        console.log(user);
-        setLoading(false);
-        e.target.reset();
-        navigate("/")
-    })
-    .catch(()=>{
-      alert("Sign Up failed. Please try again.");
-    })
+    console.log(email)
+    console.log(password)
+
+    try {
+      const result =  await SignUp(email, password);
+      const user = result.user;
+
+      if (user) {
+      await updateProfile(user, {
+        displayName: name,
+        photoURL: photoURL || null
+      });
+    }
+
+    setUser(user);
+    navigate(`${location.state ? location.state : "/"}`)
+    e.target.reset();
+    } catch (error) {
+       console.error("Sign up error:", error);
+       alert(`Sign Up failed: ${error.message || 'Please try again.'}`);
+    } finally {
+      setLoading(false);
+    }
+  
+   
+    // .then(result => {
+    //     const user = result.user;
+    //     setUser(user);
+    //     setLoading(false);
+    // })
+    // .catch(()=>{
+    //   alert("Sign Up failed. Please try again.");
+    // })
+  
+    
+
   };
 
   const handleGoogleSignUp = () => {
@@ -53,7 +78,7 @@ const {isDark} = use(ThemeContext);
         const googleuser = result.user
         setUser(googleuser)
         console.log(googleuser);
-         navigate("/")
+        navigate(`${location.state ? location.state : "/"}`)
     })
     .catch(() => {
       alert("Google sign-up error:");
@@ -63,12 +88,13 @@ const {isDark} = use(ThemeContext);
 
   return (
          <div className={`min-h-[calc(100vh-4rem)]  dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${isDark ? "bg-slate-700" : "bg-gray-100"}`}>
-      <motion.div
+
+           <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-md w-full"
-      >
+        className="max-w-md w-full">
+
         <div className={`${isDark ? "bg-slate-800  border-slate-700" : "bg-white" }  rounded-2xl shadow-xl p-8 border border-slate-200 dark:`}>
           <div className={`text-center mb-8`}>
             <motion.div
@@ -156,8 +182,7 @@ const {isDark} = use(ThemeContext);
                            type='button' 
                            onClick={() => setShowPassword(!showPassword)}
                            className="absolute right-3 top-3.75 text-gray-500 hover:text-gray-700"
-                           aria-label={showPassword ? "Hide password" : "Show password"}
-                         >
+                           aria-label={showPassword ? "Hide password" : "Show password"}>
                            {showPassword ? <Eye className="h-4 w-4 sm:h-5 sm:w-5" /> : <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" />}
                          </button>
               </div>
@@ -183,8 +208,7 @@ const {isDark} = use(ThemeContext);
             <button
               type="submit"
               disabled={loading || !isPasswordValid}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 primary-btn text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 primary-btn text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -224,7 +248,7 @@ const {isDark} = use(ThemeContext);
             </Link>
           </p>
         </div>
-      </motion.div>
+           </motion.div>
     </div>
     );
 };

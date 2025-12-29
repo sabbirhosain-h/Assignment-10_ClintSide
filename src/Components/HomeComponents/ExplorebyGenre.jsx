@@ -4,7 +4,7 @@ import { ThemeContext } from '../../Context/AuthContext';
 const ExplorebyGenre = () => {
     const { isDark } = useContext(ThemeContext);
     return (
-        <div className={` ${isDark ? 'bg-gray-800' : 'bg-gray-100' }`}>
+        <div className={` ${isDark ? 'bg-gray-900' : 'bg-gray-100' }`}>
            
            <div className='py-5 md:py-15 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 '>
 
