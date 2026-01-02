@@ -8,6 +8,7 @@ import AllBooks from "../Pages/AllBooks.jsx";
 import AddBooks from "../Pages/AddBooks.jsx";
 import MyBooks from "../Pages/MyBooks.jsx";
 import PrivateRoute from "./privateRoute.jsx";
+import BookDetails from "../Pages/BookDetails.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,11 @@ export const router = createBrowserRouter([
           path: "MyBooks",
           element: <PrivateRoute><MyBooks></MyBooks></PrivateRoute>,
         },
+        {
+          path : `BookDetails/:id`,
+          // element: <PrivateRoute><BookDetails></BookDetails></PrivateRoute>
+          Component: BookDetails,
+        }
     ],
   },
 ]);

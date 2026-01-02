@@ -6,7 +6,7 @@ import { motion } from "motion/react"
 
 const LatestAdditions = ({ books }) => {
 const { isDark } = useContext(ThemeContext);
-
+const latestBooks = [...books].reverse();
 return (
 <div className={`${isDark ? 'bg-slate-900' : 'bg-gray-50'} py-12 px-4 sm:px-6 lg:px-8`}>
     <div className="max-w-7xl mx-auto">
@@ -32,7 +32,7 @@ return (
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {books.slice(0, 8).map((book) => (
+        {latestBooks.slice(0, 8).map((book) => (
         <Link
             key={book._id}
             to={`/books/${book._id}`}

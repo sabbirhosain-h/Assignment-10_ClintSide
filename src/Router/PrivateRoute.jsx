@@ -6,7 +6,7 @@ import Loader from './Loader';
 const PrivateRoute = ({children}) => {
     const {user , Loading} = use(AuthContext)
     const location = useLocation();
-    console.log(location);
+    
 
     if(Loading){ 
         return <Loader></Loader>
@@ -15,7 +15,7 @@ const PrivateRoute = ({children}) => {
         return children
     }
 
-    return <Navigate state={location.pathname} to="/Login"></Navigate>
+    return <Navigate state={location.pathname} to="/LogIn"></Navigate>
 };
 
 export default PrivateRoute;

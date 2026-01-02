@@ -7,7 +7,7 @@ import { Link } from 'react-router';
 
 const AllBooks = () => {
     const {isDark} = useContext(ThemeContext);
-    const {books} = useContext(DataContext);
+    const {books ,setId} = useContext(DataContext);
     const [search , setSearch] = useState("");
     const [genre , setGenre] = useState("All");
     const [sort, setSort] = useState("Latest First");
@@ -37,6 +37,7 @@ const AllBooks = () => {
 
         return allBooks;
     },[books, search, genre, sort]);
+    
 
     useEffect(()=>{
         setTimeout(()=>{ 
@@ -46,6 +47,7 @@ const AllBooks = () => {
     if(loading){
         return <Loader></Loader>
     }
+    
     
     return (
         <div className={`${isDark ? "bg-slate-900" : "bg-white"}  transition-colors`}>
@@ -204,7 +206,8 @@ const AllBooks = () => {
                      
                       <td className="px-6 py-4 text-center">
                         <Link
-                          to={`/book-details/${book.id}`}
+                          onClick={() => setId(book._id)}
+                          to={`/BookDetails/${book._id}`}
                           className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                           <Eye className="w-4 h-4" />
                           <span>View Details</span>
@@ -224,8 +227,7 @@ const AllBooks = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="p-4"
-                >
+                  className="p-4">
                   <div className="flex gap-4 mb-3">
                    
                     <img
@@ -257,9 +259,9 @@ const AllBooks = () => {
                   
                
                   <Link
-                    to={`/book-details/${book.id}`}
-                    className={`block text-center px-4 py-2   rounded-lg hover:bg-indigo-700 transition-colors ${isDark ? "text-slate-400" : "text-white bg-indigo-600"}`}
-                  >
+                    onClick={() => setId(book._id)}
+                    to={`/BookDetails/${book._id}`}
+                    className={`block text-center px-4 py-2   rounded-lg hover:bg-indigo-700 transition-colors ${isDark ? "text-slate-400" : "text-white bg-indigo-600"}`}>
                     View Details
                   </Link>
                 </motion.div>

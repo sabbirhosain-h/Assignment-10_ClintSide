@@ -4,8 +4,11 @@ import axios from 'axios';
 
 const DataProvider = ({children}) => {
     const [books, setBooks] = useState([]);
+    const [id, setId] = useState("")
 
     const api = 'http://localhost:3000/AllBooks'
+    
+
 
     useEffect(() => {
    const getBookData = async () => {
@@ -17,11 +20,15 @@ const DataProvider = ({children}) => {
     }
   };
 
-  getBookData();
-}, []);
+    getBookData();
+    }, []);
 
+   
     const bookData = {
-        books
+        books,
+        setBooks,
+        id,
+        setId
     }
     return (
         <DataContext value={bookData}>
