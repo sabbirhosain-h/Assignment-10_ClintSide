@@ -80,7 +80,7 @@ const Navbar = () => {
                               {user.displayName}
                             </div>
                           </div>
-                          <button onClick={SignOut} className='btn text-sm sm:text-base'>Log out</button>
+                          <button onClick={SignOut} className='btn text-sm sm:text-base bg-red-500 hover:bg-red-600 rounded-xl text-white'>Log out</button>
                         </div> 
                      : 
                      <>
