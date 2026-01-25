@@ -7,25 +7,26 @@ import { useNavigate } from 'react-router';
 
 const BookDetails = () => {
     const {isDark} = useContext(ThemeContext);
-    const {user} = useContext(AuthContext);
+    // const {user} = useContext(AuthContext);
     const {id} = useContext(DataContext);
     const [singleBook , setSingleBook] = useState([]);
     const [text, setText] = useState('')
     const navigate = useNavigate();
-    console.log(user)
-    
+    const [now , setNow] = useState(id);
+   
+   
     
     useEffect(()=>{
         const getSingleBook = async() => {
             try {
-                const res =  await axios.get(`http://localhost:3000/Bookdetails/${id}`);
+                const res =  await axios.get(`http://localhost:3000/Bookdetails/${now}`);
                 setSingleBook(res.data);
             } catch (error) {
                 alert(error)
             }
         }
         getSingleBook()
-    },[id])
+    },[now])
 
     const handleClick = () =>{
       console.log(text)
@@ -115,7 +116,7 @@ const BookDetails = () => {
                                             Added By
                                         </p>
                                         <p className={`${isDark ? "text-white" : "text-slate-900"}`}>
-                                            Hasib
+                                            {singleBook.author}
                                         </p>
                                     </div>
                                     <div>
@@ -123,7 +124,7 @@ const BookDetails = () => {
                                             User Email
                                         </p>
                                         <p className={`${isDark ? "text-white" : "text-slate-900"}`}>
-                                            Hasib
+                                            {singleBook.userEmail}
                                         </p>
                                     </div>
                                 </div>

@@ -2,7 +2,9 @@ import React, { useContext, useState } from 'react';
 import { AuthContext, DataContext, ThemeContext } from '../Context/AuthContext';
 import { BookOpen, User, Tag, Star, FileText, Image, Upload } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router';
+import {  useNavigate } from 'react-router';
+import axios from 'axios';
+
 
 const AddBooks = () => {
 
@@ -10,9 +12,10 @@ const AddBooks = () => {
     const {isDark} = useContext(ThemeContext);
     const {books , setBooks} = useContext(DataContext);
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate();
     const genres = ['Fantasy', 'Mystery', 'Romance', 'Sci-Fi', 'Classic', 'Non-Fiction', 'Thriller', 'Horror', 'Biography', 'History'];
 
-    const handleAddBook = (e) => {
+    const handleAddBook = async (e) => {
         e.preventDefault();
         setLoading(true);
         const title = e.target.title.value;
@@ -22,22 +25,28 @@ const AddBooks = () => {
         const summary = e.target.summary.value;
         const coverImage = e.target.coverImage.value;
         const userEmail = user.email;
+        console.log(userEmail);
+
 
         const newBook = { title, author, genre, rating , summary , coverImage , userEmail};
-        fetch("http://localhost:3000/AllBooks" , {
-            method : "POST",
-            headers : {
-                "Content-Type": "application/json",
-            },
-            body : JSON.stringify(newBook),
-        }).then(res => res.json())
-        .then(data => {
-            if(data.insertedId){
-                const newAllBooks = [...books , newBook];
-                setBooks(newAllBooks)
-            }
-        });
-
+        console.log(newBook);
+        
+        try {
+        const res = await axios.post(
+              "http://localhost:3000/AllBooks",
+           newBook
+         );
+    
+        if (res.data.insertedId) {
+         setBooks([...books, newBook]);
+          }
+         } catch (err) {
+           console.error(err);
+         } finally {
+           setLoading(false);
+            e.target.reset();
+            navigate('/');
+         }
     }
 
     return (
@@ -197,9 +206,8 @@ const AddBooks = () => {
             {/* Submit Button */}
             <div className="w-full">
 
-              <Link to={"/"}>
               <button
-                type="submit"
+                type='submit'
                 className="w-full items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? (
                   <>
@@ -217,7 +225,6 @@ const AddBooks = () => {
                   </>
                 )}
               </button>
-              </Link>
 
             </div>
           </form>

@@ -6,7 +6,7 @@ const TopRatedBooks = ({books}) => {
     const {isDark} = useContext(ThemeContext)
 
     const topBooks = books.filter(book => book.rating >= 4.5)
-    console.log(topBooks)
+    
     return (
         <div className={`${isDark ? "bg-gray-900" : "bg-gray-50"}`}>
 
