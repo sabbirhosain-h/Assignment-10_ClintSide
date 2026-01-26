@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { ThemeContext } from '../../Context/AuthContext';
+import { DataContext, ThemeContext } from '../../Context/AuthContext';
 import { Star, TrendingUp, User } from 'lucide-react';
 
-const TopRatedBooks = ({books}) => {
+const TopRatedBooks = () => {
     const {isDark} = useContext(ThemeContext)
-
-    const topBooks = books.filter(book => book.rating >= 4.5)
+    const {books} = useContext(DataContext)
+    const topBooks = books.filter(book => book.rating > 4.5 );
     
     return (
         <div className={`${isDark ? "bg-gray-900" : "bg-gray-50"}`}>

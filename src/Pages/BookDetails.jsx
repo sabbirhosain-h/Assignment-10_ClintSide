@@ -3,34 +3,38 @@ import { AuthContext, DataContext, ThemeContext } from '../Context/AuthContext';
 import { Edit, Trash2, Eye, Star, BookOpen, ArrowLeft, User, Calendar, MessageCircle, Send } from 'lucide-react';
 import { motion } from 'motion/react';
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import Loader from '../Router/Loader';
 
 const BookDetails = () => {
     const {isDark} = useContext(ThemeContext);
-    // const {user} = useContext(AuthContext);
-    const {id} = useContext(DataContext);
     const [singleBook , setSingleBook] = useState([]);
     const [text, setText] = useState('')
     const navigate = useNavigate();
-    const [now , setNow] = useState(id);
+    const [loading ,setLoading] = useState(true);
+    const {id} = useParams();
    
    
     
     useEffect(()=>{
         const getSingleBook = async() => {
             try {
-                const res =  await axios.get(`http://localhost:3000/Bookdetails/${now}`);
+                const res =  await axios.get(`http://localhost:3000/Bookdetails/${id}`);
                 setSingleBook(res.data);
+                setLoading(false);
             } catch (error) {
                 alert(error)
             }
         }
         getSingleBook()
-    },[now])
+    },[id])
 
     const handleClick = () =>{
       console.log(text)
       setText("")
+    }
+    if(loading){
+        return <Loader></Loader>
     }
 
     

@@ -13,8 +13,9 @@ const MyBooks = () => {
     const [myBook , setMyBook] = useState([])
     const {user} = useContext(AuthContext);
     const navigate = useNavigate();
-    const {setId} = useContext(DataContext);
-    
+    const {setId,books, setBooks} = useContext(DataContext);
+    const [delPage , setDelPage] = useState(false);
+    const [deleteId , setDeleteId] = useState(null);
     
 
 
@@ -38,7 +39,20 @@ const MyBooks = () => {
   sendData();
 }, [user?.email]);
 
-
+ const deleteBook = async (bookId) => {
+   await
+    axios.delete(`http://localhost:3000/AllBooks/${bookId}`)
+    .then(()=>{
+      const remainingBooks = myBook.filter(book => book._id !== bookId);
+      setMyBook(remainingBooks);
+      const newALlBoooks = {...books};
+      const filteredBooks = newALlBoooks.books.filter(book => book._id !== bookId);
+      setBooks(filteredBooks);
+    })
+    .catch((err)=>{
+      console.error(err);
+    })
+ };
 
   useEffect(()=>{
         setTimeout(()=>{ 
@@ -64,7 +78,7 @@ const MyBooks = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             >
-              <h1 className={`${isDark ? "text-white" : "text-slate-900"} mb-2`}>My Books</h1>
+              <h1 className={`text-[20px] ${isDark ? "text-white" : "text-slate-900"} mb-2`}>My Books</h1>
               <p className={`${isDark ? "text-slate-400" : "text-slate-600"} mb-2`}>
                 Manage Your Book Collection ({myBook.length}) Books</p>
             </motion.div>
@@ -75,7 +89,10 @@ const MyBooks = () => {
             {
               myBook.length === 0 ?
                (
-                <div className={`text-center py-20 text-[20px] ${isDark ? "text-white " : "text-slate-800 "}`}>
+                <motion.div
+                 initial={{ opacity: 0, y: -20 }}
+                 animate={{ opacity: 1, y: 0 }}>
+                  <div className={`text-center py-20 text-[20px] ${isDark ? "text-white " : "text-slate-800 "}`}>
                     <h1> You have no books in your collection.</h1>
                     <button
                      onClick={() => navigate('/AddBooks')}
@@ -87,6 +104,7 @@ const MyBooks = () => {
                     </button>
 
                 </div>
+                </motion.div>
 
                )
                :
@@ -152,12 +170,11 @@ const MyBooks = () => {
                                     <Eye className="w-5 h-5" />
                                 </button>
                                 <button
-                                  // onClick={() => setDeleteId(1)}
                                   className={`p-2 ${isDark ? "text-blue-400 bg-blue-900/30" : "text-blue-600 bg-blue-50"} rounded-lg transition-colors`}>
                                     <Edit className="w-5 h-5" />
                                 </button>
                                 <button
-                                  
+                                    onClick={() => {setDelPage(true), setDeleteId(book._id)}}
                                   className={`p-2 ${isDark ? "text-red-400 bg-red-900/30" : "text-red-600 bg-red-50"} rounded-lg transition-colors`}>
                                     <Trash2 className="w-5 h-5" />
                                 </button>
@@ -209,13 +226,16 @@ const MyBooks = () => {
                     {/* buttons */}
                     <div className='flex gap-2'>
                        <button 
-                        
+                         onClick={() => {
+                                    setId(book._id);
+                                    navigate(`/BookDetails/${book._id}`);
+                                  }}
                        className={`flex gap-2 items-center justify-center w-full rounded-lg transition-colors px-4 py-2 hover:bg-indigo-700 text-white ${isDark ? "bg-indigo-600" : " bg-indigo-600"}`}>
                           <Eye className="w-5 h-5" />
                           <span>View</span>
                        </button>
                        <button 
-                       
+                       onClick={() => {setDeleteId(book._id), setDelPage(true)}}
                        className={`flex gap-2 items-center justify-center w-full rounded-lg transition-colors px-4 py-2 hover:bg-blue-700 text-white ${isDark ? "bg-blue-600" : " bg-blue-600"}`}>
                           <Edit className="w-4 h-4" />
                           <span>Edit</span>
@@ -233,6 +253,9 @@ const MyBooks = () => {
 
                     </motion.div>
                       ))
+
+
+                      
                     }
                 </div>
 
@@ -240,6 +263,33 @@ const MyBooks = () => {
                 
                )
             }
+            {
+              delPage && (
+                <div className='fixed inset-0 bg-black/30 flex items-center justify-center z-50'>
+                  <div className={`bg-white p-6 rounded-lg shadow-lg ${isDark ? "bg-slate-800 text-white" : "bg-white text-slate-900"}`}> 
+                    <h2 className='text-xl font-bold mb-4'>Delete Book</h2>
+                    <p className='mb-4'>Are you sure you want to delete this book?</p>
+                    <div className='flex gap-2'>
+                      <button 
+                        onClick={() => setDelPage(false)}
+                        className={`px-4 py-2 rounded-lg ${isDark ? "bg-slate-700 text-white" : "bg-slate-200 text-slate-900"}`}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        onClick={() => {
+                        deleteBook(deleteId),
+                        setDelPage(false);
+                         
+                        }}
+                        className={`px-4 py-2 rounded-lg ${isDark ? "bg-red-600 text-white" : "bg-red-600 text-white"}`}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) }
 
            </div>
           

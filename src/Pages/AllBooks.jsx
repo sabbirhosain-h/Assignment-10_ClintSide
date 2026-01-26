@@ -3,7 +3,7 @@ import { DataContext, ThemeContext } from '../Context/AuthContext';
 import { Eye, Search, SlidersHorizontal, Star, User } from 'lucide-react';
 import Loader from '../Router/Loader';
 import { motion } from 'motion/react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 const AllBooks = () => {
     const {isDark} = useContext(ThemeContext);
@@ -12,6 +12,7 @@ const AllBooks = () => {
     const [genre , setGenre] = useState("All");
     const [sort, setSort] = useState("Latest First");
     const [loading ,setLoading] = useState(true);
+    const navigate = useNavigate();
     
     const filteredBooks = useMemo(() => {
         let allBooks = [...books];
@@ -258,12 +259,12 @@ const AllBooks = () => {
                   </div>
                   
                
-                  <Link
-                    onClick={() => setId(book._id)}
-                    to={`/BookDetails/${book._id}`}
+                  <button
+                    // onClick={() => setId(book._id)}
+                   onClick={() =>   navigate(`/BookDetails/${book._id}`)}
                     className={`block text-center px-4 py-2   rounded-lg hover:bg-indigo-700 transition-colors ${isDark ? "text-slate-400" : "text-white bg-indigo-600"}`}>
                     View Details
-                  </Link>
+                  </button>
                 </motion.div>
               ))}
             </div>

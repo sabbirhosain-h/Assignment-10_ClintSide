@@ -1,9 +1,11 @@
 import { ArrowRight, BookText, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router';
+import { DataContext } from '../../Context/AuthContext';
 
 const Banner = () => {
+    const {books} = useContext(DataContext)
     return (
     <div className={`relative bg-linear-to-br from-indigo-600 via-purple-600 to-pink-500 overflow-hidden`}>
             
@@ -34,7 +36,7 @@ const Banner = () => {
 
                 <div className='flex items-center gap-10 mt-12'>
                     <div>
-                        <div className='text-white mb-1'>10,000+</div>
+                        <div className='text-white mb-1'>{books.length - 1}+</div>
                         <p className='text-indigo-200 text-sm'>Books</p>
                     </div>
                     <div>
@@ -42,7 +44,7 @@ const Banner = () => {
                         <p className='text-indigo-200 text-sm'>Members</p>
                     </div>
                     <div>
-                        <div className='text-white mb-1'>50+</div>
+                        <div className='text-white mb-1'>10</div>
                         <p className='text-indigo-200 text-sm'>Genres</p>
                     </div>
 

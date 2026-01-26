@@ -40,13 +40,13 @@ const Navbar = () => {
             {/* Navigation Links */}
             <div className='hidden md:flex gap-2 lg:gap-3'>
 
-                <NavLink to='/' className={({isActive}) => `px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:scale-105 ${isActive ? 'bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                <NavLink to='/' className={({isActive}) => `px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-indigo-50  hover:scale-105 ${isActive ? 'bg-indigo-50  text-indigo-600 ' : 'text-slate-600 '}`}>
                                 Home
                 </NavLink>
-                <NavLink to='/AllBooks' className={({isActive}) => `px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:scale-105 ${isActive ? 'bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                <NavLink to='/AllBooks' className={({isActive}) => `px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-indigo-50  hover:scale-105 ${isActive ? 'bg-indigo-50  text-indigo-600 ' : 'text-slate-600 '}`}>
                                 All Books
                 </NavLink>
-                <NavLink to='/AddBooks' className={({isActive}) => `px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:scale-105 ${isActive ? 'bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                <NavLink to='/AddBooks' className={({isActive}) => `px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-indigo-50  hover:scale-105 ${isActive ? 'bg-indigo-50  text-indigo-600 ' : 'text-slate-600 '}`}>
                                 Add Book
                 </NavLink>
                 <NavLink to='/MyBooks' className={({isActive}) => `px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:scale-105 ${isActive ? 'bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300'}`}>
@@ -117,28 +117,28 @@ const Navbar = () => {
                         <NavLink 
                             to='/' 
                             onClick={toggleMenu}
-                            className={({isActive}) => `block px-4 py-3 rounded-lg font-medium transition-all ${isActive ? 'bg-indigo-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                            className={({isActive}) => `block px-4 py-3 rounded-lg font-medium transition-all ${isActive ? 'bg-indigo-100  text-indigo-600 ' : 'text-slate-700 '}`}
                         >
                             Home
                         </NavLink>
                         <NavLink 
                             to='/AllBooks' 
                             onClick={toggleMenu}
-                            className={({isActive}) => `block px-4 py-3 rounded-lg font-medium transition-all ${isActive ? 'bg-indigo-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                            className={({isActive}) => `block px-4 py-3 rounded-lg font-medium transition-all ${isActive ? 'bg-indigo-100  text-indigo-600 ' : 'text-slate-700   '}`}
                         >
                             All Books
                         </NavLink>
                         <NavLink 
                             to='/AddBooks' 
                             onClick={toggleMenu}
-                            className={({isActive}) => `block px-4 py-3 rounded-lg font-medium transition-all ${isActive ? 'bg-indigo-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                            className={({isActive}) => `block px-4 py-3 rounded-lg font-medium transition-all ${isActive ? 'bg-indigo-100  text-indigo-600 ' : 'text-slate-700'}`}
                         >
                             Add Books
                         </NavLink>
                         <NavLink 
                             to='/MyBooks' 
                             onClick={toggleMenu}
-                            className={({isActive}) => `block px-4 py-3 rounded-lg font-medium transition-all ${isActive ? 'bg-indigo-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                            className={({isActive}) => `block px-4 py-3 rounded-lg font-medium transition-all ${isActive ? 'bg-indigo-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-300 '}     `}
                         >
                             My Books
                         </NavLink>

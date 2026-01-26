@@ -21,7 +21,7 @@ const DataProvider = ({children}) => {
   };
 
     getBookData();
-    }, []);
+    }, [books]);
 
    
     const bookData = {
