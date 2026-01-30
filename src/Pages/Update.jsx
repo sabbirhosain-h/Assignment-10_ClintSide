@@ -1,77 +1,101 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext, DataContext, ThemeContext } from '../Context/AuthContext';
 import { BookOpen, User, Tag, Star, FileText, Image, Upload } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router';
 import { motion } from 'motion/react';
-import {  useNavigate } from 'react-router';
+import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 
-
-const AddBooks = () => {
-
-    const {user} = useContext(AuthContext);
+const Update = () => {
     const {isDark} = useContext(ThemeContext);
-    const {books , setBooks} = useContext(DataContext);
-    const [loading, setLoading] = useState(false)
-    const [coverImage, setCoverImage] = useState('');
+    const {user} = useContext(AuthContext);
+    // const {setBooks} = useContext(DataContext);
     const navigate = useNavigate();
     const genres = ['Fantasy', 'Mystery', 'Romance', 'Sci-Fi', 'Classic', 'Non-Fiction', 'Thriller', 'Horror', 'Biography', 'History'];
-
-    const handleAddBook = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        const title = e.target.title.value;
-        const author = e.target.author.value;
-        const genre = e.target.genre.value;
-        const rating = e.target.rating.value;
-        const summary = e.target.summary.value;
-        const coverImage = e.target.coverImage.value;
-        const userEmail = user.email;
-      
-
-
-        const newBook = { title, author, genre, rating , summary , coverImage , userEmail};
-     
-        
-        try {
-        const res = await axios.post(
-              "http://localhost:3000/AllBooks",
-           newBook
-         );
+    const [loading, setLoading] = useState(true);
+    const {id} = useParams();
     
-        if (res.data.insertedId) {
-         setBooks([...books, newBook]);
-          }
-         } catch (err) {
-           console.error(err);
-         } finally {
-           setLoading(false);
-            e.target.reset();
-            navigate('/');
-         }
-    }
+    const [title , setTitle] = useState('');
+    const [author , setAuthor] = useState('');
+    const [genre , setGenre] = useState('');
+    const [rating , setRating] = useState('');
+    const [summary , setSummary] = useState('');
+    const [coverImage , setCoverImage] = useState('');
+    
+    useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/Bookdetails/${id}`)
+        setTitle(res.data.title || '');
+        setAuthor(res.data.author || '');
+        setGenre(res.data.genre || '');
+        setRating(res.data.rating || '');
+        setSummary(res.data.summary || '');
+        setCoverImage(res.data.coverImage || '');
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBook();
+  }, [id]);
+  
+  const userEmail = user.email;
+  
+  const handleUpdate = async (e) => { 
+        e.preventDefault();
+        const updatedBook = {
+            title,
+            author,
+            genre,
+            rating,
+            summary,
+            coverImage,
+            userEmail
+        };
+
+        try {
+            await axios.put(`http://localhost:3000/Update/${id}`, updatedBook)
+                .then(() => {
+                    navigate(`/BookDetails/${id}`);
+                    
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } catch (error) {
+            console.error('Error updating book:', error);
+        }
+    };
+
+
 
     return (
-        <div className={`${isDark ? "bg-slate-900 " : "bg-white transition-colors"}`}>
-           
-           <div className="min-h-screen py-12">
-             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-8" >
+        <div className={`${isDark ? "bg-slate-900" : "bg-white"} min-h-screen`}> 
 
-                  <h1 className={`text-[30px] ${isDark ? "text-white" : "text-slate-900"} mb-2`}>Add New Book</h1>
-                  <p className={` ${isDark ? "text-slate-400" : "text-slate-600"}`}>
-                   Share your favorite book with the community </p>
-             </motion.div>
+            <div className='max-w-7xl mx-auto px-10 sm:px-15 py-15'>
 
-        <motion.div
+
+                <motion.button 
+                 initial={{ opacity: 0, x: -20 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 onClick={()=> navigate("/MyBooks")} 
+                 className={`flex justify-center items-center gap-2 mb-10 hover:text-blue-900 ${isDark ? "text-white" : "text-slate-600"}  `}>
+                    <ArrowLeft className='h-5 w-5'></ArrowLeft>
+                    <span className='text-[20px]'>Back</span>
+                </motion.button>
+
+
+            <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className={`${isDark ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"}  rounded-2xl shadow-sm border   p-8`}>
-          <form onSubmit={handleAddBook} className="space-y-6">
+          className={`${isDark ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"}  rounded-2xl shadow-sm border p-8`}>
+          <form 
+          onSubmit={handleUpdate} 
+          className="space-y-6">
 
             {/* Title */}
             <div>
@@ -81,7 +105,8 @@ const AddBooks = () => {
               </label>
               <input
                 id="title"
-                name="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 type="text"
                 className={`w-full ${isDark ? "bg-slate-900 border-slate-600 text-white" : "bg-slate-50 border-slate-300"} px-4 py-3  border  rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 `}
                 placeholder="Enter book title"
@@ -96,6 +121,8 @@ const AddBooks = () => {
               </label>
               <input
                 id="author"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
                 name="author"
                 type="text"
                 className={`w-full ${isDark ? "bg-slate-900 border-slate-600 text-white" : "bg-slate-50 border-slate-300"} px-4 py-3  border  rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 `}
@@ -112,6 +139,8 @@ const AddBooks = () => {
                   <span>Genre</span>
                 </label>
                 <select
+                  value={genre}
+                  onChange={(e) => setGenre(e.target.value)}
                   id="genre"
                   name="genre"
                   className={`w-full ${isDark ? "bg-slate-900 border-slate-600 text-white" : "bg-slate-50 border-slate-300"} px-4 py-3  border  rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 `}
@@ -129,6 +158,8 @@ const AddBooks = () => {
                   <span>Rating (1-5)</span>
                 </label>
                 <input
+                  value={rating}
+                  onChange={(e) => setRating(e.target.value)}
                   id="rating"
                   name="rating"
                   type="number"
@@ -147,6 +178,8 @@ const AddBooks = () => {
                 <span>Summary</span>
               </label>
               <textarea
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
                 id="summary"
                 name="summary"
                 rows={4}
@@ -168,12 +201,12 @@ const AddBooks = () => {
                 <div className="flex-1">
                   <input
                     id="coverImage"
+                    value={coverImage}
+                    onChange={(e) => setCoverImage(e.target.value)}
                     name="coverImage"
                     type="url"
                     className={`w-full ${isDark ? "bg-slate-900 border-slate-600 text-white" : "bg-slate-50 border-slate-300"} px-4 py-3  border  rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 `}
                     placeholder="Enter image URL or upload below"
-                    value={coverImage}
-                    onChange={(e) => setCoverImage(e.target.value)}
                   />
                 </div>
                 
@@ -192,15 +225,15 @@ const AddBooks = () => {
                 </div>
 
               </div>
-
-              {
+                {
                 coverImage && (
                   <div className='mt-4'>
-                <h1 className={`mb-1 ${isDark ? "text-slate-300" : "text-slate-700"}`}>Preview:</h1>
+                 <h1 className={`mb-1 ${isDark ? "text-slate-300" : "text-slate-700"}`}>Preview:</h1>
+               
                 <img className='h-50 w-50 rounded-2xl'  src={coverImage} alt="" />
               </div>
                 )
-              }
+                }
 
             </div>
 
@@ -221,7 +254,7 @@ const AddBooks = () => {
 
               <button
                 type='submit'
-                className="w-full items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                className="w-full items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"> 
                 {loading ? (
                   <>
                    <div className='flex gap-3 justify-center items-center'>
@@ -242,10 +275,17 @@ const AddBooks = () => {
             </div>
           </form>
         </motion.div>
-      </div>
-    </div>
+
+
+
+
+
+
+
+            </div>
+           
         </div>
     );
 };
 
-export default AddBooks;
+export default Update;

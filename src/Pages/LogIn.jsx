@@ -56,7 +56,7 @@ const LogIn = () => {
 
 
     return (
-       <div className={`min-h-[calc(100vh-4rem)]  dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${isDark ? "bg-slate-700" : "bg-gray-100"}`}>
+       <div className={`min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${isDark ? "bg-slate-700" : "bg-gray-100"}`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

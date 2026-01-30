@@ -1,6 +1,6 @@
 import React, { useContext,  useEffect,  useState,  } from 'react';
 import { AuthContext, DataContext, ThemeContext } from '../Context/AuthContext';
-import { Edit, Trash2, Eye, Star, BookOpen, Trash } from 'lucide-react';
+import { Edit, Trash2, Eye, Star, BookOpen, } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
@@ -13,7 +13,7 @@ const MyBooks = () => {
     const [myBook , setMyBook] = useState([])
     const {user} = useContext(AuthContext);
     const navigate = useNavigate();
-    const {setId,books, setBooks} = useContext(DataContext);
+    const {books, setBooks} = useContext(DataContext);
     const [delPage , setDelPage] = useState(false);
     const [deleteId , setDeleteId] = useState(null);
     
@@ -93,12 +93,12 @@ const MyBooks = () => {
                  initial={{ opacity: 0, y: -20 }}
                  animate={{ opacity: 1, y: 0 }}>
                   <div className={`text-center py-20 text-[20px] ${isDark ? "text-white " : "text-slate-800 "}`}>
+                    <BookOpen className="w-16 h-16 mx-auto mb-4 text-indigo-600" />
                     <h1> You have no books in your collection.</h1>
                     <button
-                     onClick={() => navigate('/AddBooks')}
-                     >
+                     onClick={() => navigate('/AddBooks')}>
                       <div className={`mt-4 inline-block px-6 py-2 rounded-lg text-white ${isDark ? "bg-indigo-600 hover:bg-indigo-700" : "bg-indigo-600 hover:bg-indigo-700"} transition-colors`}>
-                        <BookOpen className="w-4 h-4 inline-block mr-3" />
+                      
                         <span>Add New Book</span>
                       </div>
                     </button>
@@ -163,13 +163,13 @@ const MyBooks = () => {
                               <div className='flex items-center justify-center gap-2'>
                                 <button
                                   onClick={() => {
-                                    setId(book._id);
                                     navigate(`/BookDetails/${book._id}`);
                                   }}
                                   className={`p-2 ${isDark ? "text-indigo-400 bg-indigo-900/30" : "text-indigo-600 bg-indigo-50"} rounded-lg transition-colors`}>
                                     <Eye className="w-5 h-5" />
                                 </button>
                                 <button
+                                  onClick={() => {navigate(`/Update/${book._id}`)}}
                                   className={`p-2 ${isDark ? "text-blue-400 bg-blue-900/30" : "text-blue-600 bg-blue-50"} rounded-lg transition-colors`}>
                                     <Edit className="w-5 h-5" />
                                 </button>
@@ -226,22 +226,19 @@ const MyBooks = () => {
                     {/* buttons */}
                     <div className='flex gap-2'>
                        <button 
-                         onClick={() => {
-                                    setId(book._id);
-                                    navigate(`/BookDetails/${book._id}`);
-                                  }}
+                       onClick={() => navigate(`/BookDetails/${book._id}`)}
                        className={`flex gap-2 items-center justify-center w-full rounded-lg transition-colors px-4 py-2 hover:bg-indigo-700 text-white ${isDark ? "bg-indigo-600" : " bg-indigo-600"}`}>
                           <Eye className="w-5 h-5" />
                           <span>View</span>
                        </button>
                        <button 
-                       onClick={() => {setDeleteId(book._id), setDelPage(true)}}
+                       onClick={() => {navigate(`/Update/${book._id}`)}}
                        className={`flex gap-2 items-center justify-center w-full rounded-lg transition-colors px-4 py-2 hover:bg-blue-700 text-white ${isDark ? "bg-blue-600" : " bg-blue-600"}`}>
                           <Edit className="w-4 h-4" />
                           <span>Edit</span>
                        </button>
                        <button 
-                       
+                         onClick={() => {setDelPage(true), setDeleteId(book._id)}}
                        className={`flex gap-2 items-center justify-center w-full rounded-lg transition-colors px-4 py-2 hover:bg-red-700 text-white ${isDark ? "bg-red-600" : " bg-red-600"}`}>
                           <Trash2 className="w-4 h-4" />
                           <span>Delete</span>

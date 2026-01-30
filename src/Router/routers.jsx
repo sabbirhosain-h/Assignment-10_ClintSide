@@ -9,6 +9,7 @@ import AddBooks from "../Pages/AddBooks.jsx";
 import MyBooks from "../Pages/MyBooks.jsx";
 import PrivateRoute from "./privateRoute.jsx";
 import BookDetails from "../Pages/BookDetails.jsx";
+import Update from "../Pages/Update.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +44,10 @@ export const router = createBrowserRouter([
         {
           path : `BookDetails/:id`,
           element: <PrivateRoute><BookDetails></BookDetails></PrivateRoute>
-          // Component: BookDetails,
+        },
+        {
+          path : `Update/:id`,
+          element: <PrivateRoute><Update></Update></PrivateRoute>
         }
     ],
   },

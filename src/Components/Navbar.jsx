@@ -1,15 +1,17 @@
 import { BookText, Moon, Sun, Menu, X } from 'lucide-react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router';
 import { AuthContext, ThemeContext } from '../Context/AuthContext';
+import Loader from '../Router/Loader';
 
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const {user, SignOut} = useContext(AuthContext);
     const {isDark , setIsDark} = useContext(ThemeContext);
+    const pic = user?.photoURL;
+    const [userImage ,setUserImage] = useState(pic);
     
-        
     const toggleDarkMode = () => { 
     setIsDark(!isDark);
     };
@@ -17,6 +19,9 @@ const Navbar = () => {
     const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     };
+    useEffect(() => {
+        setUserImage(pic);
+    }, [pic]);
 
     return (
         <div className={` bg-white shadow-md sticky top-0 z-50 `}>
@@ -31,7 +36,7 @@ const Navbar = () => {
                             <div className='w-10 h-10 primary-btn rounded-xl flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 shadow-md'>
                                 <BookText className='text-white w-6 h-6'/>
                             </div>
-                            <span className={`text-xl font-semibold text-slate-800 sm:block group-hover:text-indigo-600 ${isDark ? 'dark:group-hover:text-indigo-400 text-white' : ''}   transition-colors`}>
+                            <span className={`text-xl font-semibold text-slate-800 sm:block group-hover:text-indigo-600 ${isDark ? 'group-hover:text-indigo-400 text-white' : ''}   transition-colors`}>
                                 The Book Haven
                             </span>
                         </Link>
@@ -75,7 +80,7 @@ const Navbar = () => {
                      user ? 
                      <div className='flex gap-3 sm:gap-4 justify-center items-center'>
                           <div className='relative group'>
-                            <img className='h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover cursor-pointer' src={`${user ? user.photoURL : <CircleUser size={28} color="#373833" strokeWidth={3} />}`} alt="" />
+                            <img className='h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover cursor-pointer' src={`${user ? userImage : <CircleUser size={28} color="#373833" strokeWidth={3} />}`} alt="" />
                             <div className='absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-1 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none'>
                               {user.displayName}
                             </div>

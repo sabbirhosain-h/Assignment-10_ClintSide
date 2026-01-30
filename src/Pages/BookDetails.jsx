@@ -5,14 +5,18 @@ import { motion } from 'motion/react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router';
 import Loader from '../Router/Loader';
+import { formatDistanceToNow } from 'date-fns';
 
 const BookDetails = () => {
     const {isDark} = useContext(ThemeContext);
+    const {user} = useContext(AuthContext);
     const [singleBook , setSingleBook] = useState([]);
     const [text, setText] = useState('')
     const navigate = useNavigate();
     const [loading ,setLoading] = useState(true);
     const {id} = useParams();
+    const [comments , setComments] = useState()
+    
    
    
     
@@ -28,11 +32,62 @@ const BookDetails = () => {
         }
         getSingleBook()
     },[id])
+    
+    useEffect(()=>{
+        const getComments = async() => {
+            try {
+                const res =  await axios.get(`http://localhost:3000/comments/${id}`);
+                setComments(res.data.data);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getComments()
+    },[id]);
+    
 
-    const handleClick = () =>{
-      console.log(text)
-      setText("")
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+       
+        const commsentData = {
+            bookId: singleBook._id,
+            userName: user.displayName,
+            commentText: text,
+            userPhoto: user.photoURL,
+            userEmail: user.email,
+        }
+       
+       try {
+         await axios.post(`http://localhost:3000/comments`, commsentData);
+         setText("");
+         e.target.reset();
+         
+         const res = await axios.get(`http://localhost:3000/comments/${id}`);
+         setComments(res.data.data);
+       } catch (error) {
+        console.log(error);
+       }
+       
+
+
+
     }
+
+    
+
+    const handleDeleteComment = async (id ,commentId) => {
+
+        try {
+            await axios.delete(`http://localhost:3000/comments/${id}/${commentId}`);
+           
+            const res = await axios.get(`http://localhost:3000/comments/${id}`);
+            setComments(res.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     if(loading){
         return <Loader></Loader>
     }
@@ -94,7 +149,10 @@ const BookDetails = () => {
 
                                     <Calendar className='h-5 w-5 '></Calendar>
                                     <span>
-                                      
+                                       {singleBook.createdAt 
+                                   ? formatDistanceToNow(new Date(singleBook.createdAt), { addSuffix: true })
+                                    : '1 month ago'
+                                     }
                                     </span>
                                 </div>
 
@@ -145,54 +203,73 @@ const BookDetails = () => {
                  initial={{ opacity: 0, y: 20 }}
                  animate={{ opacity: 1, y: 0 }}
                  transition={{ delay: 0.2 }}
-                 className={`p-5 border-2 mt-5 rounded-2xl ${isDark ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"}`}
-                >
+                 className={`p-5 border-2 mt-5 rounded-2xl ${isDark ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200"}`}>
 
                     <div className='flex gap-3 items-center mb-5'>
                         <MessageCircle className={`w-6 h-6  ${isDark ? "text-indigo-400" : "text-indigo-600"} `}>
                         </MessageCircle>
                         <h3 className={`${isDark ? "text-white" : "text-slate-600"}`}>
-                            Comments (0)
+                            Comments ({comments ? comments.length : 0})
                         </h3>
                     </div>
 
                     <div className='flex gap-3'>
-                        <img className='h-12 w-12 rounded-full mr-3' src="https://cdn2.momjunction.com/wp-content/uploads/baby-names/bn-wallpapers/hasib_i_love_wallpaper.jpg.webp" alt="" />
+                        <img className='h-12 w-12 rounded-full mr-3' src={user.photoURL} alt="" />
 
-                        <div className='w-full'>
-                            <textarea 
-                            value={text}
+                        <form onSubmit={handleSubmit} className='w-full'>
+                            <input 
                             onChange={(e) => setText(e.target.value)}
-                            rows={4} className={`${isDark ? "bg-slate-900 text-white" : "bg-indigo-100"} border-indigo-150 rounded-2xl w-full p-4`} placeholder='Add a Comment...' row type="text" />
+                             className={`${isDark ? "bg-slate-900 text-white" : "bg-indigo-100"} border-indigo-150 rounded-2xl w-full p-4`} placeholder='Add a Comment...' required type="text" />
 
-                            <button onClick={()=> handleClick()} type='submit' className={`mt-2 flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors`}>
+                            <button  type='submit' className={`mt-2 flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors`}>
                                 <Send className='w-4 h-4'></Send>
                                 <span>Post Comment</span>
                             </button>
-                        </div>
+                        </form>
 
                     </div>
                         {/* comments */}
                         
-                    <div className='mt-5'>
-                        
-                      <div className='flex gap-4'>
-                        <img className='h-10 w-10 rounded-full mr-3' src="https://cdn2.momjunction.com/wp-content/uploads/baby-names/bn-wallpapers/hasib_i_love_wallpaper.jpg.webp" alt="" />
+                   {
+                    comments && comments.map((comment) => (
+        <div key={comment.UserId} className='mt-5 '>
+      
+      <div className='flex flex-col sm:flex-row gap-4'>
 
-                        <div className='gap-y-1.5'>
-                            
-                            <div className='flex gap-4'>
-                                <h1 className={`${isDark ? "text-white" : "text-black"}`}>hasib</h1>
-                                <span className={`${isDark ? "text-slate-400" : "text-slate-800"}`}>12?jan </span>
-                            </div>
+        <img className='h-12 w-12 rounded-full mr-3 sm:mr-0' src={comment.userPhoto} alt="" />
 
-                            <p className={`${isDark ? "text-slate-400" : "text-slate-800"}`}> asjhvdakjfvajfvavfsbvd erhg eiugerg;</p>
-                        </div>
-                      </div>
+        <div className='gap-y-1.5 flex-1 min-w-0'>
+            
+          <div className='flex flex-wrap gap-2 sm:gap-4 mb-1'>
+            <h1 className={`${isDark ? "text-white" : "text-black"} text-sm sm:text-base font-semibold`}>
+              {comment.userName}
+            </h1>
+            <span className={`${isDark ? "text-slate-400" : "text-slate-800"} text-xs sm:text-sm whitespace-nowrap`}>
+              {comment.createdAt 
+                ? formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })
+                : 'Just now'
+              }
+            </span>
+          </div>
 
-                      
+          <p className={`${isDark ? "text-slate-400" : "text-slate-800"} text-sm sm:text-base wrap-break-word`}>
+            {comment.commentText}
+          </p>
+        </div>
 
-                    </div>
+        <button 
+           onClick={() => handleDeleteComment( id ,comment.UserId)}
+          className={`flex gap-2 items-center justify-center rounded-lg transition-colors px-3 py-2 sm:px-4 hover:bg-red-700 text-white self-start sm:self-center whitespace-nowrap ${isDark ? "bg-red-600" : "bg-red-600"}`}>
+          <Trash2 className="w-4 h-4" />
+          <span className="text-sm sm:text-base">Delete</span>
+        </button>
+
+      </div>
+       <div className="divider"></div>
+
+    </div>
+                    ))
+                    }
                     
                 </motion.div>
 
