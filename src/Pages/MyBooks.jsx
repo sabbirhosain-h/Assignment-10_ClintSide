@@ -3,8 +3,10 @@ import { AuthContext, DataContext, ThemeContext } from '../Context/AuthContext';
 import { Edit, Trash2, Eye, Star, BookOpen, } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
 import Loader from '../Router/Loader';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '../hooks/useAxiosSecure';
+
 
 
 const MyBooks = () => {
@@ -16,60 +18,85 @@ const MyBooks = () => {
     const {books, setBooks} = useContext(DataContext);
     const [delPage , setDelPage] = useState(false);
     const [deleteId , setDeleteId] = useState(null);
+    const axiosSecure = useAxiosSecure();
     
 
+  
 
     useEffect(() => {
   if (!user?.email) return;
 
-  const sendData = async () => {
+    const sendData = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:3000/mybooks",
-        { userEmail: user.email }
+      const res = await axiosSecure.post("/mybooks",
+        { userEmail: user.email },
       );
       setMyBook(res.data);
     } catch (err) {
-      console.error(err);
+       Swal.fire({
+               icon: "error",
+               title: "Oops...",
+               text: `'Please try again.'`,
+                confirmButtonText: 'OK'
+             });
     } finally {
       setLoading(false);
     }
-  };
+    };
 
   sendData();
-}, [user?.email]);
+}, [user?.email, axiosSecure]);
 
  const deleteBook = async (bookId) => {
-   await
-    axios.delete(`http://localhost:3000/AllBooks/${bookId}`)
-    .then(()=>{
-      const remainingBooks = myBook.filter(book => book._id !== bookId);
-      setMyBook(remainingBooks);
-      const newALlBoooks = {...books};
-      const filteredBooks = newALlBoooks.books.filter(book => book._id !== bookId);
+   try {
+     await axiosSecure.delete(`/AllBooks/${bookId}`,
+     
+    );
+    
+  
+    const remainingBooks = myBook.filter(book => book._id !== bookId);
+    setMyBook(remainingBooks);
+    
+  
+    if (Array.isArray(books)) {
+    
+      const filteredBooks = books.filter(book => book._id !== bookId);
       setBooks(filteredBooks);
-    })
-    .catch((err)=>{
-      console.error(err);
-    })
+    } else if (books && books.books && Array.isArray(books.books)) {
+ 
+      const filteredBooks = books.books.filter(book => book._id !== bookId);
+      setBooks({ ...books, books: filteredBooks });
+    }
+    
+    Swal.fire({
+      title: 'Book Deleted',
+      icon: "success",
+      draggable: true,
+      confirmButtonText: 'OK'
+    });
+    
+   } catch (err) {
+     console.log(err);
+     Swal.fire({
+       icon: "error",
+       title: "Oops...",
+       text: 'Please try again.',
+       confirmButtonText: 'OK'
+     });
+   }
  };
 
   useEffect(()=>{
-        setTimeout(()=>{ 
+        const timer = setTimeout(()=>{ 
             setLoading(false);
-        },500)
+        },1000);
+        
+        return () => clearTimeout(timer);
     },[myBook])
+
     if(loading){
         return <Loader></Loader>
-    }
-
-
-
-
-
-
-
-    
+    }    
     return (
         <div className={`${isDark ? "bg-slate-900" : "bg-white transition-colors"} min-h-screen`}>
            <div className='max-w-7xl mx-auto lg:py-10 py-4 px-4 sm:px-6 lg:px-8'>
@@ -150,7 +177,7 @@ const MyBooks = () => {
                             <td className={`px-6 py-4 ${isDark ? "text-slate-400" : "text-slate-600"}`}>{book.author}</td>
                             <td className='px-6 py-4'>
                               <span className={`${isDark ? "bg-indigo-900/50 text-indigo-400" : "bg-indigo-100 text-indigo-600"} rounded-lg text-sm px-3 py-1`}>
-                                Horror  
+                                {book.genre}  
                               </span>
                             </td>
                             <td className="px-6 py-4">
@@ -174,7 +201,7 @@ const MyBooks = () => {
                                     <Edit className="w-5 h-5" />
                                 </button>
                                 <button
-                                    onClick={() => {setDelPage(true), setDeleteId(book._id)}}
+                                    onClick={() => {setDelPage(true); setDeleteId(book._id);}}
                                   className={`p-2 ${isDark ? "text-red-400 bg-red-900/30" : "text-red-600 bg-red-50"} rounded-lg transition-colors`}>
                                     <Trash2 className="w-5 h-5" />
                                 </button>
@@ -238,7 +265,7 @@ const MyBooks = () => {
                           <span>Edit</span>
                        </button>
                        <button 
-                         onClick={() => {setDelPage(true), setDeleteId(book._id)}}
+                         onClick={() => {setDelPage(true); setDeleteId(book._id);}}
                        className={`flex gap-2 items-center justify-center w-full rounded-lg transition-colors px-4 py-2 hover:bg-red-700 text-white ${isDark ? "bg-red-600" : " bg-red-600"}`}>
                           <Trash2 className="w-4 h-4" />
                           <span>Delete</span>
@@ -275,7 +302,7 @@ const MyBooks = () => {
                       </button>
                       <button 
                         onClick={() => {
-                        deleteBook(deleteId),
+                        deleteBook(deleteId);
                         setDelPage(false);
                          
                         }}

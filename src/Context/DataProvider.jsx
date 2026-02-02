@@ -1,39 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { DataContext } from './AuthContext';
-import axios from 'axios';
+import useAxios from '../hooks/useAxios';
 
 const DataProvider = ({children}) => {
     const [books, setBooks] = useState([]);
-    const [id, setId] = useState("")
+    const [id, setId] = useState("");
 
-    const api = 'http://localhost:3000/AllBooks'
-    
-
+    const Instance = useAxios();
 
     useEffect(() => {
-   const getBookData = async () => {
-    try {
-      const res = await axios.get(api);
-      setBooks(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+        const getBookData = async () => {
+            try {
+                const res = await Instance.get("/AllBooks");
+                setBooks(res.data);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
 
-    getBookData();
-    }, [books]);
+        getBookData();
+    }, []); 
 
-   
     const bookData = {
         books,
         setBooks,
         id,
         setId
-    }
+    };
+
     return (
-        <DataContext value={bookData}>
+        <DataContext.Provider value={bookData}>
             {children}
-        </DataContext>
+        </DataContext.Provider>
     );
 };
 

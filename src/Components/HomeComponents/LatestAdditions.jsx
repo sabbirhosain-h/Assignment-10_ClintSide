@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '../../Context/AuthContext';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { ArrowRight, Star, User } from 'lucide-react';
 import { motion } from "motion/react"
 
 const LatestAdditions = ({ books }) => {
 const { isDark } = useContext(ThemeContext);
 const latestBooks = [...books].reverse();
+const navigate = useNavigate();
+
+
+
 return (
 <div className={`${isDark ? 'bg-slate-900' : 'bg-gray-50'} py-12 px-4 sm:px-6 lg:px-8`}>
     <div className="max-w-7xl mx-auto">
@@ -31,11 +35,11 @@ return (
       initial={{ x: -100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {latestBooks.slice(0, 8).map((book) => (
-        <Link
+        <div
             key={book._id}
-            to={`/books/${book._id}`}
+             onClick={() =>   navigate(`/BookDetails/${book._id}`)}
             className={`group rounded-lg overflow-hidden transition-all duration-300 ${
             isDark
                 ? 'bg-gray-800 hover:bg-gray-750 shadow-lg hover:shadow-xl'
@@ -85,7 +89,7 @@ return (
                 </div>
             </div>
             </div>
-        </Link>
+        </div>
         ))}
     </motion.div>
     </div>

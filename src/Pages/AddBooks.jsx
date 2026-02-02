@@ -4,6 +4,8 @@ import { BookOpen, User, Tag, Star, FileText, Image, Upload } from 'lucide-react
 import { motion } from 'motion/react';
 import {  useNavigate } from 'react-router';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import useAxios from '../hooks/useAxios';
 
 
 const AddBooks = () => {
@@ -15,7 +17,7 @@ const AddBooks = () => {
     const [coverImage, setCoverImage] = useState('');
     const navigate = useNavigate();
     const genres = ['Fantasy', 'Mystery', 'Romance', 'Sci-Fi', 'Classic', 'Non-Fiction', 'Thriller', 'Horror', 'Biography', 'History'];
-
+    const axiosInstance = useAxios();
     const handleAddBook = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -33,8 +35,8 @@ const AddBooks = () => {
      
         
         try {
-        const res = await axios.post(
-              "http://localhost:3000/AllBooks",
+        const res = await axiosInstance.post(
+              "AllBooks",
            newBook
          );
     
@@ -42,10 +44,22 @@ const AddBooks = () => {
          setBooks([...books, newBook]);
           }
          } catch (err) {
-           console.error(err);
+           Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `${err.message || 'Please try again.'}`,
+                     confirmButtonText: 'OK'
+                  });
          } finally {
            setLoading(false);
             e.target.reset();
+             Swal.fire({
+                            title: 'New Book Added',
+                            text: 'Do you want to continue',
+                            icon: "success",
+                            draggable: true,
+                            confirmButtonText: 'OK'
+                      })
             navigate('/');
          }
     }

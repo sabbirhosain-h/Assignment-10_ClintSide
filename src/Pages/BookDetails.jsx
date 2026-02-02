@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext, DataContext, ThemeContext } from '../Context/AuthContext';
-import { Edit, Trash2, Eye, Star, BookOpen, ArrowLeft, User, Calendar, MessageCircle, Send } from 'lucide-react';
+import { AuthContext, ThemeContext } from '../Context/AuthContext';
+import {  Trash2,  Star,  ArrowLeft, User, Calendar, MessageCircle, Send } from 'lucide-react';
 import { motion } from 'motion/react';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router';
 import Loader from '../Router/Loader';
 import { formatDistanceToNow } from 'date-fns';
+import Swal from 'sweetalert2';
+import useAxios from '../hooks/useAxios';
 
 const BookDetails = () => {
     const {isDark} = useContext(ThemeContext);
@@ -16,14 +17,14 @@ const BookDetails = () => {
     const [loading ,setLoading] = useState(true);
     const {id} = useParams();
     const [comments , setComments] = useState()
+    const axiosInstance = useAxios();
     
-   
    
     
     useEffect(()=>{
         const getSingleBook = async() => {
             try {
-                const res =  await axios.get(`http://localhost:3000/Bookdetails/${id}`);
+                const res =  await axiosInstance.get(`Bookdetails/${id}`);
                 setSingleBook(res.data);
                 setLoading(false);
             } catch (error) {
@@ -31,19 +32,19 @@ const BookDetails = () => {
             }
         }
         getSingleBook()
-    },[id])
+    },[id, axiosInstance])
     
     useEffect(()=>{
         const getComments = async() => {
             try {
-                const res =  await axios.get(`http://localhost:3000/comments/${id}`);
+                const res =  await axiosInstance.get(`comments/${id}`);
                 setComments(res.data.data);
             } catch (error) {
                 console.log(error)
             }
         }
         getComments()
-    },[id]);
+    },[id, axiosInstance]);
     
 
     const handleSubmit = async (e) => {
@@ -58,32 +59,48 @@ const BookDetails = () => {
         }
        
        try {
-         await axios.post(`http://localhost:3000/comments`, commsentData);
+         await axiosInstance.post(`/comments`, commsentData);
          setText("");
          e.target.reset();
+         Swal.fire({
+                     title: 'Comment Added',
+                     icon: "success",
+                     draggable: true,
+                     confirmButtonText: 'OK'
+               })
          
-         const res = await axios.get(`http://localhost:3000/comments/${id}`);
+         const res = await axiosInstance.get(`/comments/${id}`);
          setComments(res.data.data);
-       } catch (error) {
-        console.log(error);
+       } catch {
+        Swal.fire({
+                 icon: "error",
+                 title: "Oops...",
+                 text: 'Please try again.',
+                  confirmButtonText: 'OK'
+               });
        }
-       
-
-
-
     }
-
-    
 
     const handleDeleteComment = async (id ,commentId) => {
 
         try {
-            await axios.delete(`http://localhost:3000/comments/${id}/${commentId}`);
+            await axiosInstance.delete(`/comments/${id}/${commentId}`);
            
-            const res = await axios.get(`http://localhost:3000/comments/${id}`);
+            const res = await axiosInstance.get(`/comments/${id}`);
             setComments(res.data.data);
-        } catch (error) {
-            console.log(error);
+            Swal.fire({
+                     title: 'Comment Deleted',
+                     icon: "success",
+                     draggable: true,
+                     confirmButtonText: 'OK'
+               })
+        } catch {
+           Swal.fire({
+                 icon: "error",
+                 title: "Oops...",
+                 text: 'Please try again.',
+                  confirmButtonText: 'OK'
+               });
         }
     }
 

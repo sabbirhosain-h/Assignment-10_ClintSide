@@ -4,16 +4,18 @@ import { BookOpen, User, Tag, Star, FileText, Image, Upload } from 'lucide-react
 import { useNavigate, useParams } from 'react-router';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
-import axios from 'axios';
+import Swal from 'sweetalert2';
+import useAxios from '../hooks/useAxios';
+import useAxiosSecure from '../hooks/useAxiosSecure';
 
 const Update = () => {
     const {isDark} = useContext(ThemeContext);
     const {user} = useContext(AuthContext);
-    // const {setBooks} = useContext(DataContext);
     const navigate = useNavigate();
     const genres = ['Fantasy', 'Mystery', 'Romance', 'Sci-Fi', 'Classic', 'Non-Fiction', 'Thriller', 'Horror', 'Biography', 'History'];
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
+    const axiosInstance = useAxios();
     
     const [title , setTitle] = useState('');
     const [author , setAuthor] = useState('');
@@ -21,11 +23,11 @@ const Update = () => {
     const [rating , setRating] = useState('');
     const [summary , setSummary] = useState('');
     const [coverImage , setCoverImage] = useState('');
-    
-    useEffect(() => {
+    const axiosSecure = useAxiosSecure();
+  useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/Bookdetails/${id}`)
+        const res = await axiosInstance.get(`/Bookdetails/${id}`)
         setTitle(res.data.title || '');
         setAuthor(res.data.author || '');
         setGenre(res.data.genre || '');
@@ -40,7 +42,7 @@ const Update = () => {
     };
 
     fetchBook();
-  }, [id]);
+  }, [id, axiosInstance]);
   
   const userEmail = user.email;
   
@@ -57,16 +59,39 @@ const Update = () => {
         };
 
         try {
-            await axios.put(`http://localhost:3000/Update/${id}`, updatedBook)
-                .then(() => {
-                    navigate(`/BookDetails/${id}`);
-                    
-                })
-                .catch((err) => {
-                    console.error(err);
+
+            Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  Swal.fire("Saved!", "", "success");
+                  await axiosSecure.put(`/Update/${id}`, updatedBook ,
+                  
+               
+            ).then(() => {
+                    navigate(`/BookDetails/${id}`); })
+                .catch(() => {
+                   
                 });
+
+                } else if (result.isDenied) {
+                  Swal.fire("Changes are not saved", "", "info");
+                }
+              });
+
+
+            
         } catch (error) {
-            console.error('Error updating book:', error);
+            Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `${error.message || 'Please try again.'}`,
+                     confirmButtonText: 'OK'
+                  });
         }
     };
 
@@ -259,14 +284,14 @@ const Update = () => {
                   <>
                    <div className='flex gap-3 justify-center items-center'>
                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Adding Book...</span>
+                    <span>Updating Book...</span>
                    </div>
                   </>
                 ) : (
                   <>
                     <div className='flex gap-3 justify-center items-center'>
                         <BookOpen className='w-5 h-5'></BookOpen>
-                        <span>Add Book</span>
+                        <span>Update Book</span>
                     </div>
                   </>
                 )}

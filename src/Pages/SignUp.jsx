@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Link } from 'react-router';
 import { AuthContext, ThemeContext } from '../Context/AuthContext';
 import { updateProfile } from 'firebase/auth';
+import Swal from 'sweetalert2';
 
 
 const SignUp = () => {
@@ -49,24 +50,29 @@ const {isDark} = use(ThemeContext);
     }
 
     setUser(user);
+    Swal.fire({
+                title: 'Successfully Loggedin',
+                text: 'Do you want to continue',
+                icon: "success",
+                draggable: true,
+                confirmButtonText: 'OK'
+          })
     navigate(`${location.state ? location.state : "/"}`)
     e.target.reset();
     } catch (error) {
-       console.error("Sign up error:", error);
-       alert(`Sign Up failed: ${error.message || 'Please try again.'}`);
+       Swal.fire({
+         icon: "error",
+         title: "Oops...",
+         text: `${error.message || 'Please try again.'}`,
+          confirmButtonText: 'OK'
+       });
+     
     } finally {
       setLoading(false);
     }
   
    
-    // .then(result => {
-    //     const user = result.user;
-    //     setUser(user);
-    //     setLoading(false);
-    // })
-    // .catch(()=>{
-    //   alert("Sign Up failed. Please try again.");
-    // })
+   
   
     
 

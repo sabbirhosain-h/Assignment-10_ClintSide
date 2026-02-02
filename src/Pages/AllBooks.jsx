@@ -13,6 +13,7 @@ const AllBooks = () => {
     const [sort, setSort] = useState("Latest First");
     const [loading ,setLoading] = useState(true);
     const navigate = useNavigate();
+    // console.log(books);
     
     const filteredBooks = useMemo(() => {
         let allBooks = [...books];
@@ -40,15 +41,19 @@ const AllBooks = () => {
     },[books, search, genre, sort]);
     
 
-    useEffect(()=>{
-        setTimeout(()=>{ 
-            setLoading(false);
-        },500)
-    },[books])
-    if(loading){
-        return <Loader></Loader>
-    }
-    
+    useEffect(() => {
+    if (!books || books.length === 0) return;
+
+    const timer = setTimeout(() => { 
+        setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+   }, [books]); 
+
+
+    if (!books) return <Loader />; 
+
     
     return (
         <div className={`${isDark ? "bg-slate-900" : "bg-white"}  transition-colors`}>
@@ -157,12 +162,13 @@ const AllBooks = () => {
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-                  {filteredBooks.map((book, index) => (
+                  {filteredBooks.map((book) => (
                     <motion.tr
-                      key={book._id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
+                       key={book._id}
+                       initial={false}
+                       animate={{ opacity: 1 }}
+                       transition={{ duration: 0.2 }}
+                       layout={false}
                       className={`transition-colors  ${isDark ? "hover:bg-slate-700/50" : "hover:bg-slate-50"}`}>
                     
                       <td className="px-6 py-4">
@@ -260,9 +266,9 @@ const AllBooks = () => {
                   
                
                   <button
-                    // onClick={() => setId(book._id)}
+               
                    onClick={() =>   navigate(`/BookDetails/${book._id}`)}
-                    className={`block text-center px-4 py-2   rounded-lg hover:bg-indigo-700 transition-colors ${isDark ? "text-slate-400" : "text-white bg-indigo-600"}`}>
+                    className={`block w-full text-center px-4 py-2   rounded-lg hover:bg-indigo-700 transition-colors ${isDark ? "text-slate-400" : "text-white bg-indigo-600"}`}>
                     View Details
                   </button>
                 </motion.div>

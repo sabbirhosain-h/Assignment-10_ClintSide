@@ -3,6 +3,7 @@ import React, { use, useState } from 'react';
 import { motion } from "motion/react"
 import { Link, useLocation, useNavigate } from 'react-router';
 import { AuthContext, ThemeContext } from '../Context/AuthContext';
+import Swal from 'sweetalert2'
 
 
 const LogIn = () => {
@@ -10,7 +11,6 @@ const LogIn = () => {
 
     const { SignIn, signInWithGoogle, setUser} = use(AuthContext);
     const {isDark} = use(ThemeContext);
-    // const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -28,14 +28,19 @@ const LogIn = () => {
       const user = result.user;
 
       setUser(user);
+      Swal.fire({
+            title: 'Successfully Loggedin',
+            text: 'Do you want to continue',
+            icon: "success",
+            draggable: true,
+            confirmButtonText: 'OK'
+      })
       navigate(`${location.state ? location.state : "/"}`)
       e.target.reset();
     
     } catch (error) {
        console.error("Sign up error:", error);
        alert(`Sign Up failed: ${error.message || 'Please try again.'}`);
-    } finally{
-      setTimeout(false)
     }
     
     };

@@ -6,6 +6,7 @@ import { DataContext } from '../../Context/AuthContext';
 
 const Banner = () => {
     const {books} = useContext(DataContext)
+
     return (
     <div className={`relative bg-linear-to-br from-indigo-600 via-purple-600 to-pink-500 overflow-hidden`}>
             
@@ -27,7 +28,7 @@ const Banner = () => {
                        Browse All Books
                     </Link>
 
-                    <Link to="/MyBooks" className='flex items-center gap-2 px-6 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white/10 transition-colors'>
+                    <Link to="/AddBooks" className='flex items-center gap-2 px-6 py-3 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white/10 transition-colors'>
                        Add you books
                        <ArrowRight></ArrowRight>
                     </Link>

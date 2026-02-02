@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { DataContext, ThemeContext } from '../../Context/AuthContext';
 import { Star, TrendingUp, User } from 'lucide-react';
 
 const TopRatedBooks = () => {
     const {isDark} = useContext(ThemeContext)
     const {books} = useContext(DataContext)
-    const topBooks = books.filter(book => book.rating > 4.5 );
     
+    const topBooks = useMemo(() => {
+        return books.filter(book => book.rating > 4.5);
+    }, [books]);
+
     return (
         <div className={`${isDark ? "bg-gray-900" : "bg-gray-50"}`}>
 
