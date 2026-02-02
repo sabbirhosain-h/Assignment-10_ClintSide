@@ -4,7 +4,7 @@ A modern, user‑friendly web application built to share, explore, and enjoy boo
 
 🚀 Live Demo
 
-👉 https://resonant‑platypus‑677536.netlify.app/
+👉 https://resonant-platypus-677536.netlify.app
 
 🧠 About
 
@@ -43,3 +43,4 @@ Describe key functionality your site offers:
 🖥️ Fast content delivery through static deployment
 
 (Update to reflect the real features your site has.)
+
